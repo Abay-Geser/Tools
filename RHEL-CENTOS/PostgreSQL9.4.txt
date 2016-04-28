@@ -9,8 +9,10 @@ yum install postgresql94-server postgresql94-contrib
 service postgresql-9.4 initdb
 service postgresql-9.4 start
 chkconfig postgresql-9.4 on
+service postgresql-9.4 restart
 
 # FIREWALL SETTINGS
+
 nano /etc/sysconfig/iptables
 
 	-A INPUT -m state --state NEW -m tcp -p tcp --dport 5432 -j ACCEPT
@@ -18,6 +20,26 @@ nano /etc/sysconfig/iptables
 
 service iptables restart
 
+
+----------------------------------------------------------------------------------------
+
+For CentOS 7 64bit:
+rpm -Uvh http://yum.postgresql.org/9.4/redhat/rhel-7-x86_64/pgdg-centos94-9.4-1.noarch.rpm
+
+
+yum update
+yum install postgresql94-server postgresql94-contrib
+/usr/pgsql-9.4/bin/postgresql94-setup initdb
+systemctl enable postgresql-9.4
+systemctl start postgresql-9.4
+systemctl restart postgresql-9.4
+# FIREWALL SETTINGS
+
+firewall-cmd --permanent --add-port=5432/tcp
+firewall-cmd --permanent --add-port=80/tcp
+firewall-cmd --reload
+
+----------------------------------------------------------------------------------------
 # PASSWORD SETTINGS
 su - postgres
 psql
@@ -36,19 +58,31 @@ ALTER ROLE
 postgres=# grant all privileges on database newdb to newuser;
 GRANT
 postgres=#
-----------------------------------------------------------------------------------------
 
-For CentOS 7 64bit:
-rpm -Uvh http://yum.postgresql.org/9.4/redhat/rhel-7-x86_64/pgdg-centos94-9.4-1.noarch.rpm
+# MANAGE DB
+## Delete Users and Databases
+
+su - postgres
+Enter command:
+
+$ dropdb <database-name>
+To delete a user, enter the following command:
+
+$ dropuser <user-name>
+
+## Configure PostgreSQL-MD5 Authentication
+### MD5 authentication requires the client to supply an MD5-encrypted password for authentication. To do that, edit /var/lib/pgsql/9.4/data/pg_hba.conf file:
+
+nano /var/lib/pgsql/9.4/data/pg_hba.conf
+[...]
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+# "local" is for Unix domain socket connections only
+local   all             all                                     trust
+# IPv4 local connections:
+host    all             all             127.0.0.1/32            md5
+host    all             all             192.168.1.0/24          md5
+# IPv6 local connections:
+host    all             all             ::1/128                 md5
+[...]
 
 
-yum update
-yum install postgresql94-server postgresql94-contrib
-/usr/pgsql-9.4/bin/postgresql94-setup initdb
-systemctl enable postgresql-9.4
-systemctl start postgresql-9.4
-
-# FIREWALL SETTINGS
-firewall-cmd --permanent --add-port=5432/tcp
-firewall-cmd --permanent --add-port=80/tcp
-firewall-cmd --reload
