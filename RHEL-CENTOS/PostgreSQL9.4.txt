@@ -1,0 +1,54 @@
+#For CentOS 6.x 32bit:
+rpm -Uvh http://yum.postgresql.org/9.4/redhat/rhel-6-i386/pgdg-centos94-9.4-1.noarch.rpm
+
+For CentOS 6.x 64bit:
+rpm -Uvh http://yum.postgresql.org/9.4/redhat/rhel-6-x86_64/pgdg-centos94-9.4-1.noarch.rpm
+
+yum update
+yum install postgresql94-server postgresql94-contrib
+service postgresql-9.4 initdb
+service postgresql-9.4 start
+chkconfig postgresql-9.4 on
+
+# FIREWALL SETTINGS
+nano /etc/sysconfig/iptables
+
+	-A INPUT -m state --state NEW -m tcp -p tcp --dport 5432 -j ACCEPT
+	-A INPUT -m state --state NEW -m tcp -p tcp --dport 80 -j ACCEPT
+
+service iptables restart
+
+# PASSWORD SETTINGS
+su - postgres
+psql
+postgres=# \password postgres 
+	Enter new password: 
+	Enter it again: 
+postgres=# \q
+
+# Create New User and Database
+su - postgres
+$ createuser newuser
+createdb newdb
+psql
+postgres=# alter user newuser with encrypted password 'centos';
+ALTER ROLE
+postgres=# grant all privileges on database newdb to newuser;
+GRANT
+postgres=#
+----------------------------------------------------------------------------------------
+
+For CentOS 7 64bit:
+rpm -Uvh http://yum.postgresql.org/9.4/redhat/rhel-7-x86_64/pgdg-centos94-9.4-1.noarch.rpm
+
+
+yum update
+yum install postgresql94-server postgresql94-contrib
+/usr/pgsql-9.4/bin/postgresql94-setup initdb
+systemctl enable postgresql-9.4
+systemctl start postgresql-9.4
+
+# FIREWALL SETTINGS
+firewall-cmd --permanent --add-port=5432/tcp
+firewall-cmd --permanent --add-port=80/tcp
+firewall-cmd --reload
