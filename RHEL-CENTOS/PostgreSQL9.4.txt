@@ -85,4 +85,28 @@ host    all             all             192.168.1.0/24          md5
 host    all             all             ::1/128                 md5
 [...]
 
+Configure PostgreSQL-Configure TCP/IP
+
+By default, TCP/IP connection is disabled, so that the users from another computers can’t access postgresql. To allow to connect users from another computers, Edit file /var/lib/pgsql/9.4/data/postgresql.conf:
+
+nano /var/lib/pgsql/9.4/data/postgresql.conf
+Find the lines:
+
+[...]
+#listen_addresses = 'localhost'
+[...]
+#port = 5432
+[...]
+Uncomment both lines, and set the IP address of your postgresql server or set ‘*’ to listen from all clients as shown below:
+
+listen_addresses = '*'
+port = 5432
+Restart postgresql service to save changes:
+
+On CentOS 6.x systems:
+
+/etc/init.d/postgresql-9.4 restart
+On CentOS 7 systems:
+
+systemctl restart postgresql-9.4
 
