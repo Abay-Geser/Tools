@@ -1,0 +1,20 @@
+ALENA EXAM
+ Enter on the server 192.168.5.47 with user alena password test
+ Download from https://github.com/Abay-Geser/Tools/ archive to the /home/alena
+ Create folder AlenaExam
+ Copy into this folder archive
+ Edit this file add into bottom line 'WARNING: ALENA exams' and on the next row 'SEVERE: It is possible'
+ Copy 'SEVERE: It is possible' into /tmp/alena.txt
+ Make tcpdump into file /home/alena/exam/tcp.dump and zip it
+ Install nginx package and start it
+ Collect name in version of the linux core into /home/alena/exam/core.info
+ Collect network information into /home/alena/exam/network.info
+ Change owner for file core.info on root
+ Copy /tmp/alena.txt to /home/alena/exam/
+ Rename /home/alena/exam/alena.txt alenawanaexam.txt
+ Move alenawanaexam.txt to the /tmp/
+ Open via nano alenawanaexam.txt
+ Open new ssh session like a root
+ Find nano process and kill it
+ Add info about environment (free memmory and disk space) into /home/alena/exam/res.info
+ 
