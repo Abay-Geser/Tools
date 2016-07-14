@@ -3,6 +3,7 @@ ALENA EXAM
  Download from https://github.com/Abay-Geser/Tools/ archive to the /home/alena
  Create folder AlenaExam here /home/alena
  Copy into this folder archive
+ Unzip this archive
  Edit Alexam file add into bottom line 'WARNING: ALENA exams' and on the next row 'SEVERE: It is possible'
  Copy 'SEVERE: It is possible' into /tmp/alena.txt
  Make tcpdump into file /home/alena/exam/tcp.dump and zip it
